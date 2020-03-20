@@ -206,13 +206,13 @@ class UBX_Parser {
       @param vAcc Vertical Accuracy Estimate in millimeters
       */
     virtual void handle_NAV_POSLLH(
-            uint32_t iTOW,
-            int32_t lon,
-            int32_t lat,
-            int32_t height,
-            int32_t hMSL,
-            uint32_t hAcc,
-            uint32_t vAcc ) { }
+            uint32_t /*iTOW*/,
+            int32_t /*lon*/,
+            int32_t /*lat*/,
+            int32_t /*height*/,
+            int32_t /*hMSL*/,
+            uint32_t /*hAcc*/,
+            uint32_t /*vAcc*/ ) { }
 
     /**
       Override this method to handle NAV-HPPOSLLH messages.
@@ -225,13 +225,13 @@ class UBX_Parser {
       @param vAcc Vertical Accuracy Estimate in m
       */
     virtual void handle_NAV_HPPOSLLH(
-            uint32_t iTOW,
-            double lon,
-            double lat,
-            double height,
-            double hMSL,
-            uint32_t hAcc,
-            uint32_t vAcc ) { }
+            uint32_t /*iTOW*/,
+            double /*lon*/,
+            double /*lat*/,
+            double /*height*/,
+            double /*hMSL*/,
+            uint32_t /*hAcc*/,
+            uint32_t /*vAcc*/ ) { }
 
     /**
       Override this method to handle NAV-DOP messages.
@@ -245,14 +245,14 @@ class UBX_Parser {
       @param eDOP Easting DOP
       */
     virtual void handle_NAV_DOP(
-            uint32_t iTOW,
-            uint16_t gDOP,
-            uint16_t pDOP,
-            uint16_t tDOP,
-            uint16_t vDOP,
-            uint16_t hDOP,
-            uint16_t nDOP,
-            uint16_t eDOP ) { }
+            uint32_t /*iTOW*/,
+            uint16_t /*gDOP*/,
+            uint16_t /*pDOP*/,
+            uint16_t /*tDOP*/,
+            uint16_t /*vDOP*/,
+            uint16_t /*hDOP*/,
+            uint16_t /*nDOP*/,
+            uint16_t /*eDOP*/ ) { }
 
     /**
       Override this method to handle NAV-VELNED messages.
@@ -267,15 +267,15 @@ class UBX_Parser {
       @param cAcc Course / Heading Accuracy Estimate in degrees
       */
     virtual void handle_NAV_VELNED(
-            uint32_t iTOW,
-            int32_t velN,
-            int32_t velE,
-            int32_t velD,
-            uint32_t speed,
-            uint32_t gSpeed,
-            int32_t heading,
-            uint32_t sAcc,
-            uint32_t cAcc ) { }
+            uint32_t /*iTOW*/,
+            int32_t /*velN*/,
+            int32_t /*velE*/,
+            int32_t /*velD*/,
+            uint32_t /*speed*/,
+            uint32_t /*gSpeed*/,
+            int32_t /*heading*/,
+            uint32_t /*sAcc*/,
+            uint32_t /*cAcc*/ ) { }
 
     /**
       Override this method to handle NAV-POSLLH messages.
@@ -287,12 +287,12 @@ class UBX_Parser {
       @param relPos Relative position to base, Heading component of vector in degrees
       */
     virtual void handle_NAV_RELPOSNED(
-            uint32_t iTOW,
-            double relPosN,
-            double relPosE,
-            double relPosD,
-            double relPosLenght,
-            double relPosHeading ) { }
+            uint32_t /*iTOW*/,
+            double /*relPosN*/,
+            double /*relPosE*/,
+            double /*relPosD*/,
+            double /*relPosLenght*/,
+            double /*relPosHeading*/ ) { }
 
     /**
       Override this method to handle NAV-PVT messages.
@@ -308,14 +308,14 @@ class UBX_Parser {
       @param pDOP position Dilution of Precision
       */
     virtual void handle_NAV_PVT(
-            uint32_t iTOW,
-            bool rtkFix,
-            bool rtkFloat,
-            uint8_t numSatelites,
-            double speed,
-            double headingOfMotion,
-            double headingOfVehicle,
-            double pDOP ) { }
+            uint32_t /*iTOW*/,
+            bool /*rtkFix*/,
+            bool /*rtkFloat*/,
+            uint8_t /*numSatelites*/,
+            double /*speed*/,
+            double /*headingOfMotion*/,
+            double /*headingOfVehicle*/,
+            double /*pDOP*/ ) { }
 
 
 
@@ -324,7 +324,7 @@ class UBX_Parser {
       * handled by current code.
       * @param msgid ID of current message
       */
-    virtual void reportUnhandled( char msgid ) { }
+    virtual void reportUnhandled( char /*msgid*/ ) { }
 
   public:
 
