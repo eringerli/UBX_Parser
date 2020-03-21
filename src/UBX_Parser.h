@@ -29,7 +29,6 @@ class UBX_Parser {
   private:
 
     typedef enum {
-
       GOT_NONE,
       GOT_SYNC1,
       GOT_SYNC2,
@@ -39,7 +38,6 @@ class UBX_Parser {
       GOT_LENGTH2,
       GOT_PAYLOAD,
       GOT_CHKA
-
     } state_t;
 
     state_t state;
@@ -52,7 +50,6 @@ class UBX_Parser {
     char* payload = nullptr;
 
     void addchk( int b ) {
-
       chka = ( chka + b ) & 0xFF;
       chkb = ( chkb + chka ) & 0xFF;
     }
@@ -94,10 +91,10 @@ class UBX_Parser {
           bool rtkFix = flags & ( 1 << 2 );
           bool rtkFloat = flags & ( 1 << 1 );
           uint8_t numSatelites = unpack_uint8( 23 );
-          double speed = unpack_int32( 60 ) * 1e-3;
-          double headingOfMotion = unpack_int32( 64 ) * 1e-5;
-          double headingOfVehicle = unpack_int32( 84 ) * 1e-5;
-          double pDOP = unpack_int32( 76 ) * 1e-2;
+          double speed = double( unpack_int32( 60 ) ) * 1e-3;
+          double headingOfMotion = double( unpack_int32( 64 ) ) * 1e-5;
+          double headingOfVehicle = double( unpack_int32( 84 ) ) * 1e-5;
+          double pDOP = double( unpack_int32( 76 ) ) * 1e-2;
 
           handle_NAV_PVT( iTOW, rtkFix, rtkFloat, numSatelites, speed, headingOfMotion, headingOfVehicle, pDOP );
         }
@@ -121,19 +118,19 @@ class UBX_Parser {
         // NAV_HPPOSLLH
         case 0x14: {
           uint32_t iTOW = unpack_uint32( 0 );
-          double lon = unpack_int32( 8 ) * 1e-7;
-          double lat = unpack_int32( 12 ) * 1e-7;
-          double height = unpack_int32( 16 ) * 1e-3;
-          double hMSL = unpack_int32( 20 ) * 1e-3;
+          double lon = double( unpack_int32( 8 ) ) * 1e-7;
+          double lat = double( unpack_int32( 12 ) ) * 1e-7;
+          double height = double( unpack_int32( 16 ) ) * 1e-3;
+          double hMSL = double( unpack_int32( 20 ) ) * 1e-3;
 
-          lon += unpack_int8( 24 ) * 1e-9;
-          lat += unpack_int8( 25 ) * 1e-9;
+          lon += double( unpack_int8( 24 ) ) * 1e-9;
+          lat += double( unpack_int8( 25 ) ) * 1e-9;
 
-          height += unpack_int8( 26 ) * 1e-4;
-          hMSL += unpack_int8( 27 ) * 1e-4;
+          height += double( unpack_int8( 26 ) ) * 1e-4;
+          hMSL += double( unpack_int8( 27 ) ) * 1e-4;
 
-          uint32_t hAcc = unpack_uint32( 28 );
-          uint32_t vAcc = unpack_uint32( 32 );
+          double hAcc = double( unpack_uint32( 28 ) ) * 1e-4;
+          double vAcc = double( unpack_uint32( 32 ) ) * 1e-4;
           handle_NAV_HPPOSLLH( iTOW, lon, lat, height, hMSL, hAcc, vAcc );
         }
         break;
@@ -141,16 +138,16 @@ class UBX_Parser {
         // NAV_RELPOSNED
         case 0x3C: {
           uint32_t iTOW = unpack_uint32( 4 );
-          double relPosN = unpack_int32( 8 ) * 1e-2;
-          double relPosE = unpack_int32( 12 ) * 1e-2;
-          double relPosD = unpack_int32( 16 ) * 1e-2;
-          double relPosLenght = unpack_int32( 20 ) * 1e-2;
-          double relPosHeading = unpack_int32( 24 ) * 1e-2;
+          double relPosN = double( unpack_int32( 8 ) ) * 1e-2;
+          double relPosE = double( unpack_int32( 12 ) ) * 1e-2;
+          double relPosD = double( unpack_int32( 16 ) ) * 1e-2;
+          double relPosLenght = double( unpack_int32( 20 ) ) * 1e-2;
+          double relPosHeading = double( unpack_int32( 24 ) ) * 1e-2;
 
-          relPosN += unpack_int8( 32 ) * 1e-4;
-          relPosE += unpack_int8( 33 ) * 1e-4;
-          relPosD += unpack_int8( 34 ) * 1e-4;
-          relPosLenght += unpack_int8( 35 ) * 1e-4;
+          relPosN += double( unpack_int8( 32 ) ) * 1e-4;
+          relPosE += double( unpack_int8( 33 ) ) * 1e-4;
+          relPosD += double( unpack_int8( 34 ) ) * 1e-4;
+          relPosLenght += double( unpack_int8( 35 ) ) * 1e-4;
 
           handle_NAV_RELPOSNED( iTOW, relPosD, relPosE, relPosN, relPosLenght, relPosHeading );
         }
@@ -230,8 +227,8 @@ class UBX_Parser {
             double /*lat*/,
             double /*height*/,
             double /*hMSL*/,
-            uint32_t /*hAcc*/,
-            uint32_t /*vAcc*/ ) { }
+            double /*hAcc*/,
+            double /*vAcc*/ ) { }
 
     /**
       Override this method to handle NAV-DOP messages.
@@ -351,42 +348,36 @@ class UBX_Parser {
       * message is successfully parsed.
       * @param b the byte
       */
-    void parse( int b ) {
+    void parse( const uint8_t b ) {
       if( b == 0xB5 ) {
-
         state = GOT_SYNC1;
       }
 
       else if( b == 0x62 && state == GOT_SYNC1 ) {
-
         state = GOT_SYNC2;
         chka = 0;
         chkb = 0;
       }
 
       else if( state == GOT_SYNC2 ) {
-
         state = GOT_CLASS;
         msgclass = b;
         addchk( b );
       }
 
       else if( state == GOT_CLASS ) {
-
         state = GOT_ID;
         msgid = b;
         addchk( b );
       }
 
       else if( state == GOT_ID ) {
-
         state = GOT_LENGTH1;
         msglen = b;
         addchk( b );
       }
 
       else if( state == GOT_LENGTH1 ) {
-
         state = GOT_LENGTH2;
         msglen += ( b << 8 );
         count = 0;
@@ -394,7 +385,6 @@ class UBX_Parser {
       }
 
       else if( state == GOT_LENGTH2 ) {
-
         addchk( b );
         payload[count] = b;
         count += 1;
@@ -406,12 +396,10 @@ class UBX_Parser {
       }
 
       else if( state == GOT_PAYLOAD ) {
-
         state = ( b == chka ) ? GOT_CHKA : GOT_NONE;
       }
 
       else if( state == GOT_CHKA ) {
-
         if( b == chkb ) {
           dispatchMessage();
         }
